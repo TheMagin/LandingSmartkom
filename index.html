@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>SmartKom - Sistema Informe Trimestral y de Gestión
+            Municipal</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+    :root {
+      --color-bg: #f5f7fb;
+      --color-surface: #ffffff;
+      --color-primary: #1d4ed8;  /* Azul principal */
+      --color-primary-soft: #e0ebff;
+      --color-accent: #16a34a;   /* Verde indicadores */
+      --color-danger: #dc2626;   /* Rojo déficit */
+      --color-text-main: #0f172a;
+      --color-text-muted: #6b7280;
+      --radius-lg: 18px;
+      --shadow-soft: 0 14px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text-main);
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Layout general */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(245, 247, 251, 0.9);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: var(--color-primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--color-primary);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      color: var(--color-text-muted);
+      position: relative;
+      padding-bottom: 3px;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text-main);
+    }
+
+    .nav-links a:not(.btn):hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--color-primary);
+      border-radius: 999px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 35px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-outline {
+      background: white;
+      border-color: rgba(148, 163, 184, 0.4);
+      color: var(--color-text-main);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      box-shadow: 0 6px 18px rgba(148, 163, 184, 0.4);
+    }
+
+    main {
+      padding-bottom: 4rem;
+    }
+
+    section {
+      padding: 3rem 0;
+    }
+
+    /* Hero */
+
+    .hero {
+      padding-top: 2.5rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.08);
+      color: var(--color-accent);
+      border: 1px solid rgba(22, 163, 74, 0.16);
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--color-accent);
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 4vw, 2.7rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.75rem;
+      color: var(--color-text-main);
+    }
+
+    .hero-highlight {
+      color: var(--color-primary);
+    }
+
+    .hero-subtitle {
+      font-size: 0.98rem;
+      color: var(--color-text-muted);
+      max-width: 32rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .hero-meta-item strong {
+      color: var(--color-text-main);
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top, #e0ebff, #ffffff 55%);
+      padding: 1.8rem 1.5rem;
+      border-radius: 28px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .hero-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+    }
+
+    .hero-kpis {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .kpi-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius-lg);
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .kpi-value {
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
+    .kpi-pill {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.08);
+      color: var(--color-accent);
+    }
+
+    .kpi-pill.neg {
+      background: rgba(220, 38, 38, 0.08);
+      color: var(--color-danger);
+    }
+
+    .kpi-caption {
+      margin-top: 0.25rem;
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    /* Secciones comunes */
+
+    .section-header {
+      max-width: 700px;
+      margin-bottom: 1.8rem;
+    }
+
+    .section-kicker {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--color-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-description {
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.4rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.2rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.02);
+      font-size: 0.9rem;
+    }
+
+    .card-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .card-tag {
+      display: inline-flex;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.06);
+      color: var(--color-primary);
+      margin-bottom: 0.6rem;
+    }
+
+    .card ul {
+      margin-left: 1.1rem;
+      margin-top: 0.3rem;
+      color: var(--color-text-muted);
+    }
+
+    .card li {
+      margin-bottom: 0.3rem;
+    }
+
+    /* Dos columnas */
+
+    .two-columns {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    /* Video */
+
+    .video-wrapper {
+      background: var(--color-surface);
+      border-radius: 24px;
+      padding: 1.2rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .video-aspect {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      border-radius: 18px;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 0, #e0ebff, #0f172a);
+    }
+
+    .video-aspect iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      left: 0;
+      top: 0;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: #e5e7eb;
+      gap: 0.6rem;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    .video-play {
+      width: 60px;
+      height: 60px;
+      border-radius: 999px;
+      border: 2px solid rgba(248, 250, 252, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(6px);
+    }
+
+    /* Lista simple */
+
+    .list-check {
+      list-style: none;
+      margin-left: 0;
+    }
+
+    .list-check li {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
+    }
+
+    .check-dot {
+      margin-top: 0.25rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: var(--color-accent);
+    }
+
+    /* Precios */
+
+    .pricing-card {
+      background: linear-gradient(135deg, #1d4ed8, #0f172a);
+      color: white;
+      border-radius: 28px;
+      padding: 1.8rem 1.7rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-chip {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.8;
+      margin-bottom: 0.35rem;
+    }
+
+    .pricing-main {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .pricing-amount {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .pricing-note {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      margin-top: 0.25rem;
+    }
+
+    .pricing-includes {
+      margin-top: 1.1rem;
+      font-size: 0.85rem;
+    }
+
+    .pricing-includes ul {
+      margin-top: 0.4rem;
+      margin-left: 1rem;
+    }
+
+    .pricing-cta {
+      margin-top: 1.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    /* Footer */
+
+    footer {
+      border-top: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 1.5rem 0 2rem;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .footer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .cards-grid,
+      .two-columns {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-card {
+        order: -1;
+      }
+
+      .nav-links {
+        display: none; /* Versión simple, se podría reemplazar por menú hamburguesa */
+      }
+
+      header {
+        position: static;
+      }
+
+      .hero {
+        padding-top: 1.5rem;
+      }
+    }
+  </style>
+    </head>
+    <body>
+        <!-- Navegación -->
+        <header>
+            <div class="container">
+                <nav class="nav">
+                    <div class="nav-left">
+                        <div class="logo-circle">SK</div>
+                        <div class="brand-text">
+                            <span class="brand-title">SmartKom</span>
+                            <span class="brand-subtitle">Informe Trimestral
+                                &amp; Gestión Municipal</span>
+                        </div>
+                    </div>
+                    <div class="nav-links">
+                        <a href="#inicio">Inicio</a>
+                        <a href="#funciones">Funciones</a>
+                        <a href="#tecnologia">Tecnología</a>
+                        <a href="#demo">Demo</a>
+                        <a href="#precios">Precios</a>
+                        <a href="/login" class="btn btn-outline">Login</a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <!-- Hero -->
+            <section id="inicio" class="hero">
+                <div class="container hero-grid">
+                    <div>
+                        <div class="badge">
+                            <span class="badge-dot"></span>
+                            Diseñado para Direcciones de Control & SECPLA
+                        </div>
+                        <h1 class="hero-title">
+                            Sistema <span class="hero-highlight">SmartKom</span>
+                            para informes
+                            trimestrales y gestión municipal.
+                        </h1>
+                        <p class="hero-subtitle">
+                            Estandariza el análisis de tus informes
+                            trimestrales, advierte
+                            desviaciones presupuestarias y genera indicadores
+                            claves de gestión
+                            en tiempo real, todo en una plataforma 100% web y
+                            segura.
+                        </p>
+                        <div class="hero-cta">
+                            <a href="#demo" class="btn btn-primary">Ver demo del
+                                sistema</a>
+                            <a href="/login" class="btn btn-outline">Ir al
+                                Login</a>
+                        </div>
+                        <div class="hero-meta">
+                            <div class="hero-meta-item">
+                                <strong>Smart Komun SpA</strong><br />
+                                Asesorías · Auditorías · Capacitaciones ·
+                                Software
+                            </div>
+                            <div class="hero-meta-item">
+                                <strong>Propiedad Intelectual N°
+                                    2021-A-8204</strong><br />
+                                Facilita trato directo y compra ágil
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta tipo panel con indicadores -->
+                    <div class="hero-card">
+                        <div class="hero-card-header">
+                            <div>
+                                <div class="hero-card-title">Panel
+                                    SmartKom</div>
+                                <div
+                                    style="font-size:0.78rem;color:var(--color-text-muted);">
+                                    Vista consolidada de gasto, déficit y otros
+                                    indicadores claves.
+                                </div>
+                            </div>
+                            <div
+                                style="font-size:0.75rem;color:var(--color-text-muted);">
+                                Marzo • Municipal
+                            </div>
+                        </div>
+                        <div class="hero-kpis">
+                            <div class="kpi-card">
+                                <div class="kpi-label">Gasto en personal</div>
+                                <div class="kpi-value">
+                                    28,78%
+                                    <span class="kpi-pill">Bajo límite</span>
+                                </div>
+                                <div class="kpi-caption">
+                                    Monitoreo automático de restricciones
+                                    legales.
+                                </div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-label">Déficit / Superávit
+                                    Municipal</div>
+                                <div class="kpi-value">
+                                    M$824.188
+                                    <span class="kpi-pill">Superávit</span>
+                                </div>
+                                <div class="kpi-caption">
+                                    Cálculo automatizado de déficit y superávit.
+                                </div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-label">Gasto en contrata</div>
+                                <div class="kpi-value">
+                                    42,83%
+                                    <span class="kpi-pill neg">Sobre
+                                        límite</span>
+                                </div>
+                                <div class="kpi-caption">
+                                    Alertas tempranas ante desviaciones
+                                    presupuestarias.
+                                </div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-label">Dependencia FCM
+                                    Anual</div>
+                                <div class="kpi-value">
+                                    81,3%
+                                    <span class="kpi-pill">Indicadores
+                                        globales</span>
+                                </div>
+                                <div class="kpi-caption">
+                                    Información clave para la toma de
+                                    decisiones.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sobre la solución / Funciones clave -->
+            <section id="funciones">
+                <div class="container">
+                    <div class="section-header">
+                        <div class="section-kicker">La solución</div>
+                        <h2 class="section-title">
+                            SmartKom: Sistema de Informe Trimestral y de Gestión
+                            Municipal
+                        </h2>
+                        <p class="section-description">
+                            Desarrollado específicamente para el sector público
+                            municipal, SmartKom
+                            integra la información de tus sistemas financieros,
+                            de recursos humanos y
+                            otros proveedores de software, transformándola en
+                            reportes claros para
+                            alcaldías, direcciones de control y SECPLA.
+                        </p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-tag">Funciones clave</div>
+                            <h3 class="card-title">Gestión y control
+                                presupuestario</h3>
+                            <ul>
+                                <li>Estandariza y optimiza el análisis de
+                                    informes trimestrales.</li>
+                                <li>Complementa el Informe Semestral de
+                                    SECPLA.</li>
+                                <li>Advierte posibles desviaciones
+                                    presupuestarias y financieras.</li>
+                                <li>Calcula déficit y superávit en forma
+                                    automatizada.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-tag">Análisis en tiempo real</div>
+                            <h3 class="card-title">Indicadores para la toma de
+                                decisiones</h3>
+                            <ul>
+                                <li>Análisis de ejecución presupuestaria,
+                                    restricciones y límites legales.</li>
+                                <li>Generación de indicadores de gestión
+                                    relevantes para la administración.</li>
+                                <li>Visión consolidada del estado financiero
+                                    municipal.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-tag">Experiencia y soporte</div>
+                            <h3 class="card-title">Equipo
+                                multidisciplinario</h3>
+                            <ul>
+                                <li>Foco exclusivo en el sector público
+                                    municipal.</li>
+                                <li>Soluciones 100% web, responsivas y
+                                    seguras.</li>
+                                <li>Capacitación inicial y soporte vía
+                                    tickets.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tecnología + Video -->
+            <section id="tecnologia">
+                <div class="container two-columns">
+                    <!-- Columna tecnología -->
+                    <div>
+                        <div class="section-header">
+                            <div class="section-kicker">Tecnología</div>
+                            <h2 class="section-title">Arquitectura moderna y
+                                segura</h2>
+                            <p class="section-description">
+                                SmartKom es una solución SaaS alojada en la
+                                nube, con altos
+                                estándares de seguridad, sin límite de usuarios
+                                concurrentes y
+                                diseñada para teletrabajo y uso móvil.
+                            </p>
+                        </div>
+
+                        <div class="card" style="margin-bottom:1rem;">
+                            <h3 class="card-title">Características técnicas</h3>
+                            <ul>
+                                <li>Aplicación 100% Cloud Web (SaaS), responsiva
+                                    y móvil.</li>
+                                <li>Front-End en Angular 10.</li>
+                                <li>Back-End en ASP.NET Core 5, SQL Server 2017,
+                                    Entity Framework Core.</li>
+                                <li>Conexión segura mediante SSL.</li>
+                                <li>Perfiles de usuario para controlar acceso y
+                                    seguridad.</li>
+                                <li>Respaldo automático de base de datos en data
+                                    center en EE. UU.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="card-title">Integración de datos</h3>
+                            <p
+                                style="font-size:0.9rem;color:var(--color-text-muted);margin-top:0.25rem;">
+                                SmartKom lee e integra automáticamente la
+                                información entregada por
+                                los distintos proveedores de software del
+                                municipio (Finanzas, RRHH,
+                                etc.), evitando la manipulación manual de
+                                archivos por parte del
+                                usuario.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Columna Video -->
+                    <div id="demo">
+                        <div class="section-header">
+                            <div class="section-kicker">Demo</div>
+                            <h2 class="section-title">Video demostrativo de
+                                SmartKom</h2>
+                            <p class="section-description">
+                                En este espacio podrás incorporar un video que
+                                muestre el flujo
+                                completo de carga de datos, panel de indicadores
+                                y generación de
+                                reportes para tu municipio.
+                            </p>
+                        </div>
+
+                        <div class="video-wrapper">
+                            <div class="video-aspect">
+                                <!--
+                REEMPLAZA el siguiente bloque por tu iframe de YouTube, Vimeo o video propio.
+                Ejemplo:
+                <iframe src="https://www.youtube.com/embed/tu-video-id" allowfullscreen></iframe>
+              -->
+                                <div class="video-placeholder">
+                                    <div class="video-play">▶</div>
+                                    <div
+                                        style="font-size:0.95rem;font-weight:500;">
+                                        Aquí va tu video demostrativo
+                                    </div>
+                                    <div style="font-size:0.8rem;opacity:0.9;">
+                                        Reemplaza este placeholder por un iframe
+                                        con tu video
+                                        (YouTube, Vimeo o reproductor propio).
+                                    </div>
+                                </div>
+                                <!-- Fin placeholder -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Precios / Modelo SaaS -->
+            <section id="precios">
+                <div class="container two-columns">
+                    <div>
+                        <div class="section-header">
+                            <div class="section-kicker">Servicio SaaS</div>
+                            <h2 class="section-title">Modelo de arriendo
+                                mensual</h2>
+                            <p class="section-description">
+                                SmartKom se ofrece como servicio en la nube
+                                (Software as a Service),
+                                reduciendo tiempos de implementación y costos de
+                                infraestructura
+                                tecnológica para la municipalidad.
+                            </p>
+                        </div>
+
+                        <ul class="list-check">
+                            <li>
+                                <span class="check-dot">✓</span>
+                                <span>Aplicación y base de datos desplegada en
+                                    la nube.</span>
+                            </li>
+                            <li>
+                                <span class="check-dot">✓</span>
+                                <span>Acceso mediante credenciales personales
+                                    para cada usuario.</span>
+                            </li>
+                            <li>
+                                <span class="check-dot">✓</span>
+                                <span>Sin límite de usuarios ni de
+                                    transacciones.</span>
+                            </li>
+                            <li>
+                                <span class="check-dot">✓</span>
+                                <span>
+                                    Actualizaciones legales y normativas sin
+                                    costo adicional.
+                                </span>
+                            </li>
+                            <li>
+                                <span class="check-dot">✓</span>
+                                <span>
+                                    Desarrollos correctivos ante fallas y
+                                    soporte vía plataforma de
+                                    tickets (lunes a viernes de 09:00 a 17:00
+                                    hrs).
+                                </span>
+                            </li>
+                            <li>
+                                <span class="check-dot">✓</span>
+                                <span>Capacitación inicial a usuarios
+                                    designados.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="pricing-card">
+                            <div class="pricing-chip">Valor referencia</div>
+                            <div class="pricing-main">
+                                Arriendo mensual de la aplicación SmartKom
+                            </div>
+                            <div class="pricing-amount">
+                                $475.000 + IVA
+                            </div>
+                            <div class="pricing-note">
+                                Monto total por 3 meses: $1.695.750 (referencial
+                                para propuesta
+                                indicada). Plazo de entrega: 3 días hábiles
+                                administrativos.
+                            </div>
+
+                            <div class="pricing-includes">
+                                <strong>Desarrollos adicionales</strong>
+                                <ul>
+                                    <li>Horas de desarrollo específico se
+                                        valoran a 1 UF por HH.</li>
+                                    <li>
+                                        El servicio base no incluye nuevos
+                                        módulos ni modificaciones
+                                        fuera de alcance.
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="pricing-cta">
+                                <a href="#contacto" class="btn btn-primary">
+                                    Solicitar cotización para mi municipio
+                                </a>
+                                <span style="font-size:0.8rem;opacity:0.9;">
+                                    o agenda una demo personalizada
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top:1rem;">
+                            <h3 class="card-title">Facilidades de
+                                contratación</h3>
+                            <p
+                                style="font-size:0.9rem;color:#e11d48;font-weight:600;margin-top:0.2rem;">
+                                Trato directo por propiedad intelectual & compra
+                                ágil
+                            </p>
+                            <p
+                                style="font-size:0.85rem;color:var(--color-text-muted);margin-top:0.5rem;">
+                                Gracias al Certificado de Registro de Propiedad
+                                Intelectual,
+                                SmartKom puede ser contratado mediante trato
+                                directo (Decreto N°
+                                661 de 2024) o a través de la modalidad de
+                                Compra Ágil, según la
+                                normativa vigente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contacto -->
+            <section id="contacto">
+                <div class="container">
+                    <div class="section-header">
+                        <div class="section-kicker">Contacto</div>
+                        <h2 class="section-title">Hablemos sobre tu
+                            municipio</h2>
+                        <p class="section-description">
+                            ¿Quieres coordinar una demo en vivo o recibir una
+                            cotización
+                            ajustada a tu realidad municipal? Escríbenos y
+                            nuestro equipo te
+                            apoyará en todo el proceso.
+                        </p>
+                    </div>
+
+                    <div class="two-columns">
+                        <div class="card">
+                            <h3 class="card-title">Datos de contacto</h3>
+                            <p
+                                style="font-size:0.9rem;color:var(--color-text-muted);margin-top:0.4rem;">
+                                <strong>Smart Komun SpA</strong><br />
+                                Rut: 77.234.993-9<br />
+                                Teléfono: +56 9 2794 9530<br />
+                                Correo: <a
+                                    href="mailto:info@smartkom.cl">info@smartkom.cl</a>
+                            </p>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="card-title">¿Ya eres cliente?</h3>
+                            <p
+                                style="font-size:0.9rem;color:var(--color-text-muted);margin-top:0.4rem;">
+                                Si tu municipio ya cuenta con SmartKom, puedes
+                                acceder al sistema
+                                desde el botón de Login o usando tu enlace
+                                habitual.
+                            </p>
+                            <a href="/login" class="btn btn-primary"
+                                style="margin-top:0.8rem;">
+                                Ir al Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container footer-grid">
+                <div>© <span id="year"></span> Smart Komun SpA · Todos los
+                    derechos reservados.</div>
+                <div>SmartKom · Sistema de Informe Trimestral y Gestión
+                    Municipal</div>
+            </div>
+        </footer>
+
+        <script>
+            // Año dinámico en el footer
+            document.getElementById("year").textContent = new Date().getFullYear();
+        </script>
+    </body>
+</html>
